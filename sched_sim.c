@@ -47,13 +47,17 @@ void schedRR(FakeOS* os, void* args_, int NUM_CORES) {
 };
 
 int main(int argc, char** argv) {
-  FakeOS_init(&os, 4);
+  if(atoi(argv[1]) == 0){
+    return 0;
+  }
+  printf("%d/n", atoi(argv[1]));
+  FakeOS_init(&os, atoi(argv[1]));
   SchedRRArgs srr_args;
   srr_args.quantum=5;
   os.schedule_args=&srr_args;
   os.schedule_fn=schedRR;
   
-  for (int i=1; i<argc; ++i){
+  for (int i=2; i<argc; ++i){
     FakeProcess new_process;
     int num_events=FakeProcess_load(&new_process, argv[i]);
     printf("loading [%s], pid: %d, events:%d",
@@ -67,8 +71,8 @@ int main(int argc, char** argv) {
   printf("num processes in queue %d\n", os.processes.size);
   
   while(1){
-    core = 0;
-    for (int i = 0; i < 4; i++) {
+    core = 0; //core zero significa che tutti i core sono liberi
+    for (int i = 0; i < atoi(argv[1]); i++) {
       if (os.running[i] != NULL) {
         core = 1;  // se almeno un elemento non è NULL allora setto a uno
       }
