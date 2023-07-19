@@ -7,6 +7,8 @@ typedef struct {
   ListItem list;
   int pid;
   ListHead events; //attività che svolge, CPU o IO
+  float pred;
+  float q_current;
 } FakePCB;
 
 struct FakeOS;

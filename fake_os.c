@@ -48,6 +48,8 @@ void FakeOS_createProcess(FakeOS* os, FakeProcess* p) {
   new_pcb->list.next=new_pcb->list.prev=0;
   new_pcb->pid=p->pid;
   new_pcb->events=p->events;
+  new_pcb->pred = 0;
+  new_pcb->q_current = 0;
 
   assert(new_pcb->events.first && "process without events");
 
@@ -144,6 +146,7 @@ void FakeOS_simStep(FakeOS* os){
       ProcessEvent* e=(ProcessEvent*) running->events.first;
       assert(e->type==CPU);
       e->duration--;
+      running->q_current++;
       printf("\t\tremaining time:%d\n",e->duration);
       if (e->duration==0){
         printf("\t\tend burst\n");
