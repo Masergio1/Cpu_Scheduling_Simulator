@@ -6,9 +6,11 @@
 FakeOS os;
 
 typedef struct {
-  int quantum;
+  int quantum; //quanto di tempo
 } SchedRRArgs;
 
+
+//algoritmo round robin
 void schedRR(FakeOS* os, void* args_){
   SchedRRArgs* args=(SchedRRArgs*)args_;
 
@@ -39,7 +41,7 @@ void schedRR(FakeOS* os, void* args_){
 };
 
 int main(int argc, char** argv) {
-  FakeOS_init(&os);
+  FakeOS_init(&os, 4);
   SchedRRArgs srr_args;
   srr_args.quantum=5;
   os.schedule_args=&srr_args;
