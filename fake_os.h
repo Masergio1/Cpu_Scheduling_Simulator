@@ -10,7 +10,7 @@ typedef struct {
 } FakePCB;
 
 struct FakeOS;
-typedef void (*ScheduleFn)(struct FakeOS* os, void* args);
+typedef void (*ScheduleFn)(struct FakeOS* os, void* args, int multicore);
 
 typedef struct FakeOS{
   //con aggiunta di ** diventa un array per gestire il multicore

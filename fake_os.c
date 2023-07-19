@@ -7,6 +7,7 @@
 int multicore_glob; 
 
 void FakeOS_init(FakeOS* os, int multicore) {
+  os->running = (FakePCB**) malloc(multicore*sizeof(FakePCB*));
   for(int i = 0; i < multicore; i++){
     os->running[i]=0;
   }
@@ -15,7 +16,7 @@ void FakeOS_init(FakeOS* os, int multicore) {
   List_init(&os->processes);
   os->timer=0;
   os->schedule_fn=0;
-  int multicore_glob = multicore;
+  multicore_glob = multicore;
 }
 
 //crea un processo e controlla che non abbia un pid duplicato, lo mette poi nella coda giusta
@@ -164,18 +165,18 @@ void FakeOS_simStep(FakeOS* os){
             break;
           }
         }
-        os->running = 0;
+        os->running[i] = 0;
       }
     }
   }
 
   //da ricontrollare per dopo
   // call schedule, if defined
-  //if (os->schedule_fn && ! os->running){
-  //  (*os->schedule_fn)(os, os->schedule_args); 
-  //}
+  if (os->schedule_fn){
+    (*os->schedule_fn)(os, os->schedule_args, multicore_glob); 
+  }
 
-  // if running not defined and ready queue not empty
+  //if running not defined and ready queue not empty
   // put the first in ready to run
   //if (! os->running && os->ready.first) {
   //  os->running=(FakePCB*) List_popFront(&os->ready);
